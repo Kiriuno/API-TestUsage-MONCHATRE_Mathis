@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MHW_SearchMonster</title>
+    <link href="semantic.min.css" rel="stylesheet" type="text/css"/>
+	<script src="jquery-3.4.1.min.js"></script>
+	<script src="semantic.min.js"/></script>
+
+  </head>
+
+  <body>
+    <div class="ui fixed inverted menu">
+      <div class="ui container">
+	       <h1 class="ui header item">enter an id between 1 and 60</h1>
+	       <input type="text" id="mName" value="" class="ui input item" placeholder="Search..."></input>
+	       <button class="ui button item" type="button" onclick="getName()">GET a monster's characteristics</button>
+      </div>
+    </div>
+    <p>.</p>
+    <p>.</p>
+    <p>.</p>
+    <div class="ui main text container">
+      <h2 class="ui header">Info</h2>
+      <div class="ui list">
+        <div class="item">
+          <div class="header">ID</div>
+	        <p id="test">..</p>
+        </div>
+        <div class="item">
+          <div class="header">Monster's name</div>
+	        <p id="name">..</p>
+        </div>
+        <div class="item">
+          <div class="header">Monster's type</div>
+	        <p id="type">..</p>
+        </div>
+        <div class="item">
+          <div class="header">Monster's species</div>
+	        <p id="spec">..</p>
+        </div>
+        <div class="item">
+          <div class="header">Monster's description</div>
+	        <p id="desc">..</p>
+        </div>
+    </div>
+
+    <script>
+
+    function getXDomainRequest() {
+      var xdr = null;
+      if (window.XDomainRequest) {
+        xdr = new XDomainRequest();
+      } else if (window.XMLHttpRequest) {
+        xdr = new XMLHttpRequest();
+      } else {
+        alert("Votre navigateur ne gère pas l'AJAX cross-domain !");
+      }
+      return xdr;
+    }
+
+    function getName(){
+      var idM = document.getElementById("mName").value;
+	    document.getElementById("test").innerHTML = idM;
+
+      var link = "https://mhw-db.com/monsters/";
+      link = link.concat(document.getElementById("mName").value);
+
+      var xdrRequest =  getXDomainRequest();
+
+      xdrRequest.open("GET", link);
+
+      xdrRequest.onload = function() {
+        var monster = JSON.parse(this.responseText);
+        var nameM = monster.name;
+        var descM = monster.description;
+        var typeM = monster.type;
+        var specM = monster.species;
+        if (typeM == "https://tools.ietf.org/html/rfc2616#section-10") {
+          typeM = "undefined";
+        }
+        document.getElementById("name").innerHTML = nameM;
+        document.getElementById("desc").innerHTML = descM;
+        document.getElementById("type").innerHTML = typeM;
+        document.getElementById("spec").innerHTML = specM;
+      }
+      xdrRequest.send();
+    }
+    </script>
+
+  </body>
+
+</html>
